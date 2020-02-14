@@ -34,17 +34,6 @@ export default observer(function Root () {
   let forceTrigger = useForceTrigger(3000)
   let [api] = useApi(getApi, [forceTrigger])
 
-  useEffect(() => {
-// console.log({ todo: JSON.parse(JSON.stringify(todo)) });
-    (async () => {
-      // Skip updat because of the full list
-      if (todo.tasks.length) {
-        return;
-      }
-      $todo.setAsync('tasks', ['initial']);
-    })();
-  }, []);
-
   async function decrement () {
     $counter.increment('value', -1)
     setStateCounter(stateCounter - 1)
