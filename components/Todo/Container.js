@@ -9,7 +9,7 @@ const useTodo = () => {
   return [cloneDeep(todo), $todo]
 }
 
-const handleToggle = ({ $todo, tasks, flag, index }) => $todo.setAsync('tasks', tasks.map((task, i) => index === i ? { ...task, [flag]: !task[flag] } : task));
+const handleToggle = ({ $todo, tasks, flag, index }) => $todo.setAsync('tasks', tasks.map((task, i) => index === i ? { ...task, [flag]: !task[flag] } : task))
 
 export default observer(function TodoContainer () {
   const [{ text, tasks: rawTasks }, $todo] = useTodo()
@@ -25,17 +25,17 @@ export default observer(function TodoContainer () {
     const task = {
       text: readyText,
       done: false,
-      important: false,
+      important: false
     }
     $todo.setAsync('text', '')
     $todo.setAsync('tasks', [...tasks, task])
   }
 
-  const handleEditTask = index => text => $todo.setAsync('tasks', tasks.map((task, i) => index === i ? { ...task, text } : task));
+  const handleEditTask = index => text => $todo.setAsync('tasks', tasks.map((task, i) => index === i ? { ...task, text } : task))
 
-  const handleDoneTask = index => () => handleToggle({ $todo, tasks, index, flag: 'done' });
+  const handleDoneTask = index => () => handleToggle({ $todo, tasks, index, flag: 'done' })
 
-  const handleImportantTask = index => () => handleToggle({ $todo, tasks, index, flag: 'important' });
+  const handleImportantTask = index => () => handleToggle({ $todo, tasks, index, flag: 'important' })
 
   const handleDeleteTask = index => () => $todo.setAsync('tasks', tasks.filter((task, i) => index !== i))
 
