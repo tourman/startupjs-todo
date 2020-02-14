@@ -1,10 +1,6 @@
-import React from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types';
-import {
-  Button, View, FlatList, StyleSheet, Text,
-  TextInput,
-  Platform
-} from 'react-native'
+import { Modal, Button, View, FlatList, StyleSheet, Text, TextInput, Platform } from 'react-native'
 
 const isAndroid = Platform.OS === 'android'
 const viewPadding = 10
@@ -45,6 +41,25 @@ const styles = StyleSheet.create({
   }
 })
 
+function TodoItem({ text, done, important, onDoneTask, onImportantTask, onDeleteTask }) {
+  return (
+
+            <View>
+              <View style={styles.listItemCont}>
+                {important ? <Text>!</Text> : null}
+                <Text style={styles.listItem}>
+                  {text}
+                </Text>
+                {done ? <Text>(Done)</Text> : null}
+                <Button title='V' onPress={onDoneTask} />
+                <Button title='!' onPress={onImportantTask} />
+                <Button title='X' onPress={onDeleteTask} />
+              </View>
+              <View style={styles.hr} />
+            </View>
+  );
+}
+
 export default function TodoView ({ text, tasks, onAddTask, onDoneTask, onImportantTask, onDeleteTask, onChangeText }) {
   return (
     <>
@@ -54,20 +69,9 @@ export default function TodoView ({ text, tasks, onAddTask, onDoneTask, onImport
         <FlatList
           style={styles.list}
           data={tasks}
-          renderItem={({ item: { text, done, important }, index }) =>
-            <View>
-              <View style={styles.listItemCont}>
-                {important ? <Text>!</Text> : null}
-                <Text style={styles.listItem}>
-                  {text}
-                </Text>
-                {done ? <Text>(Done)</Text> : null}
-                <Button title='V' onPress={onDoneTask(index)} />
-                <Button title='!' onPress={onImportantTask(index)} />
-                <Button title='X' onPress={onDeleteTask(index)} />
-              </View>
-              <View style={styles.hr} />
-            </View>}
+          renderItem={({ item, index }) => <TodoItem {...item} onDoneTask={onDoneTask(index)} onImportantTask={onImportantTask(index)}
+            onDeleteTask={onDeleteTask(index)}
+          />}
         />
         <TextInput
           style={styles.textInput}
