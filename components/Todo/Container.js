@@ -6,7 +6,6 @@ import View from './View';
 
 const useTodo = () => {
   const [todo, $todo] = useDoc('todo', 'first');
-  if (!todo) throw $todo.addSelf();
   return [cloneDeep(todo), $todo];
 }
 
