@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types';
 import {
   Button, View, FlatList, StyleSheet, Text,
   TextInput,
@@ -44,7 +45,7 @@ const styles = StyleSheet.create({
   }
 })
 
-export default function TodoView ({ text, tasks, onAddTask, onDeleteTask, onChangeText }) {
+export default function TodoView ({ text, tasks, onAddTask, onDoneTask, onImportantTask, onDeleteTask, onChangeText }) {
   return (
     <>
       <View
@@ -53,12 +54,16 @@ export default function TodoView ({ text, tasks, onAddTask, onDeleteTask, onChan
         <FlatList
           style={styles.list}
           data={tasks}
-          renderItem={({ item: { text }, index }) =>
+          renderItem={({ item: { text, done, important }, index }) =>
             <View>
               <View style={styles.listItemCont}>
+                {important ? <Text>!</Text> : null}
                 <Text style={styles.listItem}>
                   {text}
                 </Text>
+                {done ? <Text>(Done)</Text> : null}
+                <Button title='V' onPress={onDoneTask(index)} />
+                <Button title='!' onPress={onImportantTask(index)} />
                 <Button title='X' onPress={onDeleteTask(index)} />
               </View>
               <View style={styles.hr} />
@@ -78,3 +83,18 @@ export default function TodoView ({ text, tasks, onAddTask, onDeleteTask, onChan
     </>
   )
 };
+
+
+TodoView.propTypes = {
+  text: PropTypes.string.isRequired,
+  tasks: PropTypes.arrayOf( PropTypes.shape({
+    text: PropTypes.string.isRequired,
+    important: PropTypes.bool.isRequired,
+    done: PropTypes.bool.isRequired,
+  }) ).isRequired,
+  onAddTask: PropTypes.func.isRequired,
+  onDoneTask: PropTypes.func.isRequired,
+  onImportantTask: PropTypes.func.isRequired,
+  onDeleteTask: PropTypes.func.isRequired,
+  onChangeText: PropTypes.func.isRequired,
+}
