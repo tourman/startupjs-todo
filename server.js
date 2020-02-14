@@ -14,8 +14,8 @@ startupjsServer({ getHead }, ee => {
       let $counter = model.at('counters.first')
       await $counter.subscribeAsync()
 
-      let $todo = model.at('todo.first');
-      await $todo.subscribeAsync();
+      let $todo = model.at('todo.first')
+      await $todo.subscribeAsync()
 
       res.json({ name: 'Test API', counter: $counter.get(), todo: $todo.get() })
     })

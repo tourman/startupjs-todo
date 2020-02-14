@@ -26,8 +26,8 @@ export default observer(function Root () {
   let [counter, $counter] = useDoc('counters', 'first')
   if (!counter) throw $counter.addSelf() // custom ORM method (see /model/)
 
-  let [todo, $todo] = useDoc('todo', 'first');
-  if (!todo) throw $todo.addSelf();
+  let [todo, $todo] = useDoc('todo', 'first')
+  if (!todo) throw $todo.addSelf()
 
   let [stateCounter, setStateCounter] = useState(0)
 

@@ -5,7 +5,7 @@ export default class CounterModel extends BaseModel {
     await this.root.addAsync(this.getCollection(), {
       id: this.getId(),
       text: '',
-      tasks: [],
+      tasks: []
     })
   }
 }

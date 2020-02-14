@@ -1,7 +1,7 @@
 import Counter from './CounterModel'
-import Todo from './TodoModel';
+import Todo from './TodoModel'
 
 export default function (racer) {
   racer.orm('counters.*', Counter)
-  racer.orm('todo.*', Todo);
+  racer.orm('todo.*', Todo)
 }

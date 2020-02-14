@@ -1,27 +1,24 @@
-import React, { useState } from 'react';
-import { Button, SafeAreaView, View, FlatList, StyleSheet, Text }  from 'react-native'
+import React from 'react'
 import {
-  AsyncStorage,
+  Button, View, FlatList, StyleSheet, Text,
   TextInput,
-  Keyboard,
   Platform
-} from "react-native";
-import { observer, useModel, useDoc } from 'startupjs'
+} from 'react-native'
 
-const isAndroid = Platform.OS == "android";
-const viewPadding = 10;
+const isAndroid = Platform.OS === 'android'
+const viewPadding = 10
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#F5FCFF",
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#F5FCFF',
     padding: viewPadding,
     paddingTop: 20
   },
   list: {
-    width: "100%"
+    width: '100%'
   },
   listItem: {
     paddingTop: 2,
@@ -30,24 +27,24 @@ const styles = StyleSheet.create({
   },
   hr: {
     height: 1,
-    backgroundColor: "gray"
+    backgroundColor: 'gray'
   },
   listItemCont: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between"
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between'
   },
   textInput: {
     height: 40,
     paddingRight: 10,
     paddingLeft: 10,
-    borderColor: "gray",
+    borderColor: 'gray',
     borderWidth: isAndroid ? 0 : 1,
-    width: "100%"
+    width: '100%'
   }
-});
+})
 
-export default function TodoView({ text, tasks, onAddTask, onDeleteTask, onChangeText }) {
+export default function TodoView ({ text, tasks, onAddTask, onDeleteTask, onChangeText }) {
   return (
     <>
       <View
@@ -62,7 +59,7 @@ export default function TodoView({ text, tasks, onAddTask, onDeleteTask, onChang
                 <Text style={styles.listItem}>
                   {task}
                 </Text>
-                <Button title="X" onPress={onDeleteTask(index)} />
+                <Button title='X' onPress={onDeleteTask(index)} />
               </View>
               <View style={styles.hr} />
             </View>}
@@ -72,12 +69,12 @@ export default function TodoView({ text, tasks, onAddTask, onDeleteTask, onChang
           onChangeText={onChangeText}
           onSubmitEditing={onAddTask}
           value={text}
-          placeholder="Add Tasks"
-          returnKeyType="done"
-          returnKeyLabel="done"
+          placeholder='Add Tasks'
+          returnKeyType='done'
+          returnKeyLabel='done'
         />
       </View>
-      <Text>{'---'}</Text>
+      <Text>---</Text>
     </>
-  );
+  )
 };
