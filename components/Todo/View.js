@@ -41,6 +41,27 @@ const styles = StyleSheet.create({
   }
 })
 
+function TodoModal({ text, visible, onChange, onSubmit, onClose }) {
+  return visible ? (
+    <Modal
+        visible={visible}
+        transparent={false}
+        onRequestClose={onClose}
+      >
+        <View>
+          <TextInput
+            style={styles.textInput}
+            onChangeText={onChange}
+            onSubmitEditing={onSubmit}
+            value={text}
+            returnKeyType='done'
+            returnKeyLabel='done'
+          />
+        </View>
+      </Modal>
+  ) : null;
+}
+
 function TodoItem({ text, done, important, onEditTask, onDoneTask, onImportantTask, onDeleteTask }) {
   const [modal, setModal] = useState(false);
   const [edit, setEdit] = useState(text);
@@ -49,25 +70,16 @@ function TodoItem({ text, done, important, onEditTask, onDoneTask, onImportantTa
   }, [text])
   return (
     <>
-      {modal ? <Modal
+      <TodoModal
+        text={edit}
         visible={modal}
-        transparent={false}
-        onRequestClose={() => setModal(false)}
-      >
-        <View>
-          <TextInput
-            style={styles.textInput}
-            onChangeText={setEdit}
-            onSubmitEditing={() => {
-              onEditTask(edit);
-              setModal(false);
-            }}
-            value={edit}
-            returnKeyType='done'
-            returnKeyLabel='done'
-          />
-        </View>
-      </Modal> : null}
+        onChange={setEdit}
+        onSubmit={() => {
+          onEditTask(edit);
+          setModal(false);
+        }}
+        onClose={() => setModal(false)}
+      />
             <View>
               <View style={styles.listItemCont}>
                 {important ? <Text>!</Text> : null}
