@@ -53,11 +53,11 @@ export default function TodoView ({ text, tasks, onAddTask, onDeleteTask, onChan
         <FlatList
           style={styles.list}
           data={tasks}
-          renderItem={({ item: task, index }) =>
+          renderItem={({ item: { text }, index }) =>
             <View>
               <View style={styles.listItemCont}>
                 <Text style={styles.listItem}>
-                  {task}
+                  {text}
                 </Text>
                 <Button title='X' onPress={onDeleteTask(index)} />
               </View>

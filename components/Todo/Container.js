@@ -10,7 +10,8 @@ const useTodo = () => {
 }
 
 export default observer(function TodoContainer () {
-  const [{ text, tasks }, $todo] = useTodo()
+  const [{ text, tasks: rawTasks }, $todo] = useTodo()
+  const tasks = rawTasks.filter(task => typeof task === 'object') // FILTER SHOULD BE REMOVED
 
   const handleChangeText = text => $todo.setAsync('text', text)
 
@@ -19,8 +20,13 @@ export default observer(function TodoContainer () {
     if (!readyText) {
       return
     }
+    const task = {
+      text: readyText,
+      done: false,
+      important: false,
+    }
     $todo.setAsync('text', '')
-    $todo.setAsync('tasks', [...tasks, readyText])
+    $todo.setAsync('tasks', [...tasks, task])
   }
 
   const handleDeleteTask = index => () => $todo.setAsync('tasks', tasks.filter((task, i) => index !== i))
