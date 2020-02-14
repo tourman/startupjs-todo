@@ -26,10 +26,24 @@ export default observer(function Root () {
   let [counter, $counter] = useDoc('counters', 'first')
   if (!counter) throw $counter.addSelf() // custom ORM method (see /model/)
 
+  let [todo, $todo] = useDoc('todo', 'first');
+  if (!todo) throw $todo.addSelf();
+
   let [stateCounter, setStateCounter] = useState(0)
 
   let forceTrigger = useForceTrigger(3000)
   let [api] = useApi(getApi, [forceTrigger])
+
+  useEffect(() => {
+// console.log({ todo: JSON.parse(JSON.stringify(todo)) });
+    (async () => {
+      // Skip updat because of the full list
+      if (todo.tasks.length) {
+        return;
+      }
+      $todo.setAsync('tasks', ['initial']);
+    })();
+  }, []);
 
   async function decrement () {
     $counter.increment('value', -1)

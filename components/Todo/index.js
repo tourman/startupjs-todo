@@ -6,6 +6,8 @@ import {
   Keyboard,
   Platform
 } from "react-native";
+import { observer, useModel } from 'startupjs'
+import cloneDeep from 'lodash/cloneDeep';
 
 const isAndroid = Platform.OS == "android";
 const viewPadding = 10;
@@ -70,7 +72,10 @@ function Item({ title }) {
   );
 }
 
-export default function Todo() {
+const useTodo = () => cloneDeep(useModel('todo.first').get());
+
+export default observer(function Todo() {
+  const todo = useTodo();
   const [state, setState] = useState({
     text: '',
     tasks: [],
@@ -129,4 +134,4 @@ export default function Todo() {
       <Text>---</Text>
     </>
   );
-};
+});
