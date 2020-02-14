@@ -10,22 +10,20 @@ const useTodo = () => {
 }
 
 export default observer(function TodoContainer() {
-  const [todo, $todo] = useTodo();
+  const [{ text, tasks }, $todo] = useTodo();
 
   const handleChangeText = text => $todo.setAsync('text', text);
 
   const handleAddTask = () => {
-    const text = todo.text.trim();
-    if (!text) {
+    const readyText = text.trim();
+    if (!readyText) {
       return;
     }
     $todo.setAsync('text', '');
-    $todo.setAsync('tasks', [...todo.tasks, text]);
+    $todo.setAsync('tasks', [...tasks, readyText]);
   };
 
-  const handleDeleteTask = index => () => $todo.setAsync('tasks', todo.tasks.filter((task, i) => index !== i));
-
-  const { text, tasks } = todo;
+  const handleDeleteTask = index => () => $todo.setAsync('tasks', tasks.filter((task, i) => index !== i));
 
   return (<View
     onAddTask={handleAddTask}
