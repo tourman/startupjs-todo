@@ -6,7 +6,7 @@ import {
   Keyboard,
   Platform
 } from "react-native";
-import { observer, useModel } from 'startupjs'
+import { observer, useModel, useDoc } from 'startupjs'
 import cloneDeep from 'lodash/cloneDeep';
 
 const isAndroid = Platform.OS == "android";
@@ -72,35 +72,28 @@ function Item({ title }) {
   );
 }
 
-const useTodo = () => cloneDeep(useModel('todo.first').get());
+const useTodo = () => {
+  const [todo, $todo] = useDoc('todo', 'first');
+  return [cloneDeep(todo), $todo];
+}
 
 export default observer(function Todo() {
-  const todo = useTodo();
-  const [state, setState] = useState({
-    text: '',
-    tasks: [],
-  });
+  const [todo, $todo] = useTodo();
 
-  const handleChangeText = text => setState(state => ({ ...state, text }));
+  const handleChangeText = text => $todo.setAsync('text', text);
 
   const handleAddTask = () => {
-    const text = state.text.trim();
+    const text = todo.text.trim();
     if (!text) {
       return;
     }
-    setState(({ tasks, text, ...state }) => ({
-      ...state,
-      text: '',
-      tasks: [...tasks, text],
-    }));
+    $todo.setAsync('text', '');
+    $todo.setAsync('tasks', [...todo.tasks, text]);
   };
 
-  const handleDeleteTask = index => () => setState(({ tasks, ...state }) => ({
-    ...state,
-    tasks: tasks.filter((task, i) => index !== i),
-  }));
+  const handleDeleteTask = index => () => $todo.setAsync('tasks', todo.tasks.filter((task, i) => index !== i));
 
-  const { text, tasks } = state;
+  const { text, tasks } = todo;
 
   return (
     <>
