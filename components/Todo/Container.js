@@ -31,6 +31,8 @@ export default observer(function TodoContainer () {
     $todo.setAsync('tasks', [...tasks, task])
   }
 
+  const handleEditTask = index => text => $todo.setAsync('tasks', tasks.map((task, i) => index === i ? { ...task, text } : task));
+
   const handleDoneTask = index => () => handleToggle({ $todo, tasks, index, flag: 'done' });
 
   const handleImportantTask = index => () => handleToggle({ $todo, tasks, index, flag: 'important' });
@@ -40,6 +42,7 @@ export default observer(function TodoContainer () {
   return (
     <View
       onAddTask={handleAddTask}
+      onEditTask={handleEditTask}
       onDoneTask={handleDoneTask}
       onImportantTask={handleImportantTask}
       onDeleteTask={handleDeleteTask}

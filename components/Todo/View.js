@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types';
 import { Modal, Button, View, FlatList, StyleSheet, Text, TextInput, Platform } from 'react-native'
 
@@ -41,9 +41,33 @@ const styles = StyleSheet.create({
   }
 })
 
-function TodoItem({ text, done, important, onDoneTask, onImportantTask, onDeleteTask }) {
+function TodoItem({ text, done, important, onEditTask, onDoneTask, onImportantTask, onDeleteTask }) {
+  const [modal, setModal] = useState(false);
+  const [edit, setEdit] = useState(text);
+  useEffect(() => {
+    setEdit(text);
+  }, [text])
   return (
-
+    <>
+      {modal ? <Modal
+        visible={modal}
+        transparent={false}
+        onRequestClose={() => setModal(false)}
+      >
+        <View>
+          <TextInput
+            style={styles.textInput}
+            onChangeText={setEdit}
+            onSubmitEditing={() => {
+              onEditTask(edit);
+              setModal(false);
+            }}
+            value={edit}
+            returnKeyType='done'
+            returnKeyLabel='done'
+          />
+        </View>
+      </Modal> : null}
             <View>
               <View style={styles.listItemCont}>
                 {important ? <Text>!</Text> : null}
@@ -53,14 +77,16 @@ function TodoItem({ text, done, important, onDoneTask, onImportantTask, onDelete
                 {done ? <Text>(Done)</Text> : null}
                 <Button title='V' onPress={onDoneTask} />
                 <Button title='!' onPress={onImportantTask} />
+                <Button title='E' onPress={() => setModal(prevModal => !prevModal)} />
                 <Button title='X' onPress={onDeleteTask} />
               </View>
               <View style={styles.hr} />
             </View>
+      </>
   );
 }
 
-export default function TodoView ({ text, tasks, onAddTask, onDoneTask, onImportantTask, onDeleteTask, onChangeText }) {
+export default function TodoView ({ text, tasks, onAddTask, onEditTask, onDoneTask, onImportantTask, onDeleteTask, onChangeText }) {
   return (
     <>
       <View
@@ -69,7 +95,7 @@ export default function TodoView ({ text, tasks, onAddTask, onDoneTask, onImport
         <FlatList
           style={styles.list}
           data={tasks}
-          renderItem={({ item, index }) => <TodoItem {...item} onDoneTask={onDoneTask(index)} onImportantTask={onImportantTask(index)}
+          renderItem={({ item, index }) => <TodoItem {...item} onEditTask={onEditTask(index)} onDoneTask={onDoneTask(index)} onImportantTask={onImportantTask(index)}
             onDeleteTask={onDeleteTask(index)}
           />}
         />
@@ -97,6 +123,7 @@ TodoView.propTypes = {
     done: PropTypes.bool.isRequired,
   }) ).isRequired,
   onAddTask: PropTypes.func.isRequired,
+  onEditTask: PropTypes.func.isRequired,
   onDoneTask: PropTypes.func.isRequired,
   onImportantTask: PropTypes.func.isRequired,
   onDeleteTask: PropTypes.func.isRequired,
