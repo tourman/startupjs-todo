@@ -30,4 +30,8 @@ export default class TodoModel extends BaseModel {
   async doneTask(index) {
     await this.toggleAsync(`tasks.${index}.done`);
   }
+
+  async importantTask(index) {
+    await this.toggleAsync(`tasks.${index}.important`); 
+  }
 }

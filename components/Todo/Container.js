@@ -9,8 +9,6 @@ const useTodo = () => {
   return [cloneDeep(todo), $todo]
 }
 
-const handleToggle = ({ $todo, tasks, flag, index }) => $todo.setAsync('tasks', tasks.map((task, i) => index === i ? { ...task, [flag]: !task[flag] } : task))
-
 export default observer(function TodoContainer () {
   const [{ text, tasks }, $todo] = useTodo()
 
@@ -36,7 +34,7 @@ export default observer(function TodoContainer () {
 
   const handleDoneTask = index => () => $todo.doneTask(index);
 
-  const handleImportantTask = index => () => handleToggle({ $todo, tasks, index, flag: 'important' })
+  const handleImportantTask = index => () => $todo.importantTask(index);
 
   const handleDeleteTask = index => () => $todo.setAsync('tasks', tasks.filter((task, i) => index !== i))
 
