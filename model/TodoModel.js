@@ -5,7 +5,6 @@ export default class TodoModel extends BaseModel {
   async addSelf () {
     await this.root.addAsync(this.getCollection(), {
       id: this.getId(),
-      text: '',
       tasks: []
     })
   }

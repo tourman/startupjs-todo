@@ -14,7 +14,7 @@ startupjsServer({ getHead }, ee => {
       let $counter = model.at('counters.first')
       await $counter.subscribeAsync()
 
-      let $todo = model.at('todo.first')
+      let $todo = model.at('todo.tasks')
       await $todo.subscribeAsync()
 
       res.json({ name: 'Test API', counter: $counter.get(), todo: $todo.get() })

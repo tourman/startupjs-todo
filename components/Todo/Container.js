@@ -5,7 +5,8 @@ import cloneDeep from 'lodash/cloneDeep'
 import View from './View'
 
 const useTodo = () => {
-  const [todo, $todo] = useDoc('todo', 'first')
+  const [todo, $todo] = useDoc('todo', 'tasks')
+  if (!todo) throw $todo.addSelf()
   return [cloneDeep(todo), $todo]
 }
 
