@@ -12,7 +12,7 @@ const useTodo = () => {
 export default observer(function TodoContainer () {
   const [{ text, tasks }, $todo] = useTodo()
 
-  const handleChangeText = text => $todo.setAsync('text', text)
+  const handleChangeText = text => $todo.updateText(text)
 
   const handleAddTask = async () => {
     const readyText = text.trim()
