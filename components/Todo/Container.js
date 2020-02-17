@@ -13,11 +13,11 @@ const handleToggle = ({ $todo, tasks, flag, index }) => $todo.setAsync('tasks', 
 
 export default observer(function TodoContainer () {
   const [{ text, tasks: rawTasks }, $todo] = useTodo()
-  const tasks = rawTasks.filter(task => typeof task === 'object') // FILTER SHOULD BE REMOVED
+  const tasks = Object.values(rawTasks).filter(task => typeof task === 'object' && task.id) // FILTER SHOULD BE REMOVED
 
   const handleChangeText = text => $todo.setAsync('text', text)
 
-  const handleAddTask = () => {
+  const handleAddTask = async () => {
     const readyText = text.trim()
     if (!readyText) {
       return
@@ -28,7 +28,7 @@ export default observer(function TodoContainer () {
       important: false
     }
     $todo.setAsync('text', '')
-    $todo.setAsync('tasks', [...tasks, task])
+    await $todo.addTask(task);
   }
 
   const handleEditTask = index => text => $todo.setAsync('tasks', tasks.map((task, i) => index === i ? { ...task, text } : task))
