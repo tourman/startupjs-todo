@@ -30,7 +30,7 @@ export default observer(function TodoContainer () {
     ]);
   }
 
-  const handleEditTask = index => text => $todo.setAsync('tasks', tasks.map((task, i) => index === i ? { ...task, text } : task))
+  const handleEditTask = index => text => $todo.editTask({ index, text });
 
   const handleDoneTask = index => () => $todo.doneTask(index);
 

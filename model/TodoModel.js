@@ -26,6 +26,10 @@ export default class TodoModel extends BaseModel {
     await this.setAsync('text', '');
   }
 
+  async editTask({ index, text }) {
+    await this.setAsync(`tasks.${index}.text`, text);
+  }
+
   async toggleAsync(path) {
     const flag = this.get(path);
     await this.setAsync(path, !flag);
