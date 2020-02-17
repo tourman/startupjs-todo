@@ -17,4 +17,8 @@ export default class TodoModel extends BaseModel {
       ...task,
     });
   }
+
+  async resetText() {
+    await this.setAsync('text', '');
+  }
 }

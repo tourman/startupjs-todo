@@ -27,8 +27,10 @@ export default observer(function TodoContainer () {
       done: false,
       important: false
     }
-    $todo.setAsync('text', '')
-    await $todo.addTask(task);
+    await Promise.all([
+      $todo.resetText(),
+      $todo.addTask(task),
+    ]);
   }
 
   const handleEditTask = index => text => $todo.setAsync('tasks', tasks.map((task, i) => index === i ? { ...task, text } : task))
