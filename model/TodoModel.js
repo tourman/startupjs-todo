@@ -10,12 +10,13 @@ export default class TodoModel extends BaseModel {
     })
   }
 
-  async addTask(task) {
-    const id = uniqueId('task');
-    await this.pushAsync('tasks', {
-      id,
-      ...task,
-    });
+  async addTask(text) {
+    const task = {
+      text,
+      done: false,
+      important: false,
+    }
+    await this.pushAsync('tasks', task);
   }
 
   async deleteTask(index) {

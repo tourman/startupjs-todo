@@ -19,14 +19,9 @@ export default observer(function TodoContainer () {
     if (!readyText) {
       return
     }
-    const task = {
-      text: readyText,
-      done: false,
-      important: false
-    }
     await Promise.all([
       $todo.resetText(),
-      $todo.addTask(task),
+      $todo.addTask(readyText),
     ]);
   }
 
