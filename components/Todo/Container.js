@@ -12,8 +12,7 @@ const useTodo = () => {
 const handleToggle = ({ $todo, tasks, flag, index }) => $todo.setAsync('tasks', tasks.map((task, i) => index === i ? { ...task, [flag]: !task[flag] } : task))
 
 export default observer(function TodoContainer () {
-  const [{ text, tasks: rawTasks }, $todo] = useTodo()
-  const tasks = Object.values(rawTasks).filter(task => typeof task === 'object' && task.id) // FILTER SHOULD BE REMOVED
+  const [{ text, tasks }, $todo] = useTodo()
 
   const handleChangeText = text => $todo.setAsync('text', text)
 
@@ -35,7 +34,7 @@ export default observer(function TodoContainer () {
 
   const handleEditTask = index => text => $todo.setAsync('tasks', tasks.map((task, i) => index === i ? { ...task, text } : task))
 
-  const handleDoneTask = index => () => handleToggle({ $todo, tasks, index, flag: 'done' })
+  const handleDoneTask = index => () => $todo.doneTask(index);
 
   const handleImportantTask = index => () => handleToggle({ $todo, tasks, index, flag: 'important' })
 

@@ -21,4 +21,13 @@ export default class TodoModel extends BaseModel {
   async resetText() {
     await this.setAsync('text', '');
   }
+
+  async toggleAsync(path) {
+    const flag = this.get(path);
+    await this.setAsync(path, !flag);
+  }
+
+  async doneTask(index) {
+    await this.toggleAsync(`tasks.${index}.done`);
+  }
 }
