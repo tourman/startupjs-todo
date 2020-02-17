@@ -10,7 +10,8 @@ import {
 import {
   observer,
   useDoc,
-  useApi
+  useApi,
+  $root
 } from 'startupjs'
 import axios from 'axios'
 import './Root.styl'
@@ -21,6 +22,10 @@ import { Increment, Todo } from './components'
 // to init the websocket connection and axios.
 // Initialization must start before doing any subscribes to data.
 init({ baseUrl: BASE_URL, orm })
+
+if (process.env.NODE_ENV === 'development') {
+  window.$root = $root
+}
 
 export default observer(function Root () {
   let [counter, $counter] = useDoc('counters', 'first')
@@ -56,7 +61,7 @@ export default observer(function Root () {
         Text.label -
       TouchableOpacity.button.clear(onPress=reset)
         Text.label RESET
-      Text.api /api (updated each 3 sec): #{JSON.stringify(api)}
+      Text.api /api (updated each 3 sec): #{JSON.stringify(api, null, 2)}
   `
 })
 
