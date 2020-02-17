@@ -23,14 +23,6 @@ export default class TodoModel extends BaseModel {
     await this.removeAsync('tasks', index);
   }
 
-  async updateText(text) {
-    await this.setAsync('text', text);
-  }
-
-  async resetText() {
-    await this.setAsync('text', '');
-  }
-
   async editTask({ index, text }) {
     await this.setAsync(`tasks.${index}.text`, text);
   }

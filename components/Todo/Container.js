@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { observer, useDoc } from 'startupjs'
 import cloneDeep from 'lodash/cloneDeep'
 
@@ -10,19 +10,16 @@ const useTodo = () => {
 }
 
 export default observer(function TodoContainer () {
-  const [{ text, tasks }, $todo] = useTodo()
-
-  const handleChangeText = text => $todo.updateText(text)
+  const [{ tasks }, $todo] = useTodo()
+  const [text, setText] = useState('');
 
   const handleAddTask = async () => {
     const readyText = text.trim()
     if (!readyText) {
       return
     }
-    await Promise.all([
-      $todo.resetText(),
-      $todo.addTask(readyText),
-    ]);
+    setText('');
+    await $todo.addTask(readyText);
   }
 
   const handleEditTask = index => text => $todo.editTask({ index, text });
@@ -40,7 +37,7 @@ export default observer(function TodoContainer () {
       onDoneTask={handleDoneTask}
       onImportantTask={handleImportantTask}
       onDeleteTask={handleDeleteTask}
-      onChangeText={handleChangeText}
+      onChangeText={setText}
       text={text}
       tasks={tasks}
     />
