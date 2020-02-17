@@ -18,6 +18,10 @@ export default class TodoModel extends BaseModel {
     });
   }
 
+  async deleteTask(index) {
+    await this.removeAsync('tasks', index);
+  }
+
   async resetText() {
     await this.setAsync('text', '');
   }

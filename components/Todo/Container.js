@@ -36,7 +36,7 @@ export default observer(function TodoContainer () {
 
   const handleImportantTask = index => () => $todo.importantTask(index);
 
-  const handleDeleteTask = index => () => $todo.setAsync('tasks', tasks.filter((task, i) => index !== i))
+  const handleDeleteTask = index => () => $todo.deleteTask(index);
 
   return (
     <View
