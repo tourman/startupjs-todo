@@ -13,8 +13,11 @@ export default observer(function Increment ({ stateCounter, setStateCounter }) {
 
   return pug`
     TouchableOpacity.button(
+      styleName=[
+        'increment',
+        (stateCounter < 5 ? 'small' : (stateCounter > 10 ? 'large' : undefined))
+      ]
       variation='increment'
-      size=(stateCounter < 5 ? 'small' : (stateCounter > 10 ? 'large' : undefined))
       onPress=increment
     )
       Text.label +

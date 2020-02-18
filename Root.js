@@ -10,11 +10,12 @@ import {
 import {
   observer,
   useDoc,
-  useApi
+  useApi,
+  $root
 } from 'startupjs'
 import axios from 'axios'
 import './Root.styl'
-import { Increment } from './components'
+import { Increment, Todo } from './components'
 
 // Init startupjs connection to server and the ORM.
 // baseUrl option is required for the native to work - it's used
@@ -22,9 +23,16 @@ import { Increment } from './components'
 // Initialization must start before doing any subscribes to data.
 init({ baseUrl: BASE_URL, orm })
 
+if (process.env.NODE_ENV === 'development') {
+  window.$root = $root
+}
+
 export default observer(function Root () {
   let [counter, $counter] = useDoc('counters', 'first')
   if (!counter) throw $counter.addSelf() // custom ORM method (see /model/)
+
+  let [todo, $todo] = useDoc('todo', 'first')
+  if (!todo) throw $todo.addSelf()
 
   let [stateCounter, setStateCounter] = useState(0)
 
@@ -43,6 +51,8 @@ export default observer(function Root () {
 
   return pug`
     View.body
+      Todo
+    View.body
       Text.greeting Hello World
       Text DB Counter: #{counter && counter.value}
       Text State Counter: #{stateCounter}
@@ -51,7 +61,7 @@ export default observer(function Root () {
         Text.label -
       TouchableOpacity.button.clear(onPress=reset)
         Text.label RESET
-      Text.api /api (updated each 3 sec): #{JSON.stringify(api)}
+      Text.api /api (updated each 3 sec): #{JSON.stringify(api, null, 2)}
   `
 })
 
