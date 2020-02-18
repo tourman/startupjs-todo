@@ -28,15 +28,15 @@ export default observer(function TasksContainer () {
     });
   }
 
-  return (
-    <View
-      onAdd={handleAdd}
-      onSearch={() => {}}
-      onChangeText={setText}
-      onChangeFilter={setFilter}
-      text={text}
-      filter={filter}
-      tasks={tasks}
-    />
-  )
+  return pug`
+    View(
+      onAdd=handleAdd
+      onSearch=() => {}
+      onChangeText=setText
+      onChangeFilter=setFilter
+      text=text
+      filter=filter
+      tasks=tasks
+    )
+  `;
 })

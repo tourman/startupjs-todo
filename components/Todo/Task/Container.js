@@ -11,15 +11,15 @@ export default observer(function TaskContainer ({ id }) {
   const handleImportant = () => $task.toggle('important');
   const handleEdit = text => $task.set('text', text);
   const { text, done, important } = task;
-  return (
-    <View
-      text={text}
-      done={done}
-      important={important}
-      onDelete={handleDelete}
-      onDone={handleDone}
-      onImportant={handleImportant}
-      onEdit={handleEdit}
-    />
-  );
+  return pug`
+    View(
+      text=text
+      done=done
+      important=important
+      onDelete=handleDelete
+      onDone=handleDone
+      onImportant=handleImportant
+      onEdit=handleEdit
+    )
+  `
 });

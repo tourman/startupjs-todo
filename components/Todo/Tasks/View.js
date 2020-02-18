@@ -44,39 +44,39 @@ const styles = StyleSheet.create({
   }
 })
 
-export default function TasksView ({ text, filter, tasks, onAdd, onSearch, onChangeText, onChangeFilter }) {
-  return (
-      <View
-        style={[styles.container, { paddingBottom: viewPadding }]}
-      >
-        <TextInput
-          style={styles.textInput}
-          onChangeText={onChangeFilter}
-          onSubmitEditing={onSearch}
-          value={filter}
-          placeholder='Find Tasks'
-          returnKeyType='done'
-          returnKeyLabel='done'
-        />
-        <FlatList
-          style={styles.list}
-          data={tasks}
-          renderItem={({ item: { id } }) => (
-            <Task
-              id={id}
-            />
-          )}
-        />
-        <TextInput
-          style={styles.textInput}
-          onChangeText={onChangeText}
-          onSubmitEditing={onAdd}
-          value={text}
-          placeholder='Add Tasks'
-          returnKeyType='done'
-          returnKeyLabel='done'
-        />
-      <Text>---</Text>
-    </View>
+const renderItem = ({ item: { id } }) => pug`
+  Task(
+    id=id
   )
+`;
+
+export default function TasksView ({ text, filter, tasks, onAdd, onSearch, onChangeText, onChangeFilter }) {
+  return pug`
+    View(
+      style=[styles.container, { paddingBottom: viewPadding }]
+    )
+      TextInput(
+        style=styles.textInput
+        onChangeText=onChangeFilter
+        onSubmitEditing=onSearch
+        value=filter
+        placeholder='Find Tasks'
+        returnKeyType='done'
+        returnKeyLabel='done'
+      )
+      FlatList(
+        style=styles.list
+        data=tasks
+        renderItem=renderItem
+      )
+      TextInput(
+        style=styles.textInput
+        onChangeText=onChangeText
+        onSubmitEditing=onAdd
+        value=text
+        placeholder='Add Tasks'
+        returnKeyType='done'
+        returnKeyLabel='done'
+      )
+  `;
 };

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { Fragment, useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { Modal, Button, View, FlatList, StyleSheet, Text, TextInput, Platform } from 'react-native'
 import { observer, useDoc, useQuery } from 'startupjs'
@@ -43,24 +43,22 @@ const styles = StyleSheet.create({
 })
 
 function TaskModal ({ text, visible, onChange, onSubmit, onClose }) {
-  return visible ? (
-    <Modal
-      visible={visible}
-      transparent={false}
-      onRequestClose={onClose}
-    >
-      <View>
-        <TextInput
-          style={styles.textInput}
-          onChangeText={onChange}
-          onSubmitEditing={onSubmit}
-          value={text}
-          returnKeyType='done'
-          returnKeyLabel='done'
-        />
-      </View>
-    </Modal>
-  ) : null
+   return visible ? pug`
+     Modal(
+       visible=visible
+       transparent=false
+       onRequestClose=onClose
+     )
+       View
+         TextInput(
+           style=styles.textInput
+           onChangeText=onChange
+           onSubmitEditing=onSubmit
+           value=text
+           returnKeyType='done'
+           returnKeyLabel='done'
+         )
+   ` : null;
 }
 
 export default function TaskView ({ text, done, important, onEdit, onDone, onImportant, onDelete }) {
@@ -69,32 +67,37 @@ export default function TaskView ({ text, done, important, onEdit, onDone, onImp
   useEffect(() => {
     setEdit(text)
   }, [text])
-  return (
-    <>
-      <TaskModal
-        text={edit}
-        visible={modal}
-        onChange={setEdit}
-        onSubmit={() => {
-          onEdit(edit)
-          setModal(false)
-        }}
-        onClose={() => setModal(false)}
-      />
-      <View>
-        <View style={styles.listItemCont}>
-          {important ? <Text>!</Text> : null}
-          <Text style={styles.listItem}>
-            {text}
-          </Text>
-          {done ? <Text>(Done)</Text> : null}
-          <Button title='V' onPress={onDone} />
-          <Button title='!' onPress={onImportant} />
-          <Button title='E' onPress={() => setModal(prevModal => !prevModal)} />
-          <Button title='X' onPress={onDelete} />
-        </View>
-        <View style={styles.hr} />
-      </View>
-    </>
-  )
+  const handleSubmit = () => {
+    onEdit(edit)
+    setModal(false)
+  }
+  const handleClose = () => setModal(false);
+  const handleEdit = () => setModal(prevModal => !prevModal);
+  return pug`
+    Fragment
+      TaskModal(
+        text=edit
+        visible=modal
+        onChange=setEdit
+        onSubmit=handleSubmit
+        onClose=handleClose
+      )
+      View
+        View(style=styles.listItemCont)
+          if important
+            Text !
+          else
+            = null
+          Text(style=styles.listItem)
+            = text
+          if done
+            Text Done
+          else
+            = null
+          Button(title='V' onPress=onDone)
+          Button(title='!' onPress=onImportant)
+          Button(title='E' onPress=handleEdit)
+          Button(title='X' onPress=onDelete)
+        View(style=styles.hr)
+  `
 }
