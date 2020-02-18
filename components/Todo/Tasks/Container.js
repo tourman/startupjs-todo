@@ -4,11 +4,16 @@ import cloneDeep from 'lodash/cloneDeep'
 
 import View from './View'
 
+const useTaskIds = query => {
+  const [tasks, $tasks] = useQuery('tasks', query);
+  return [tasks.map(({ id }) => ({ id })), $tasks];
+}
+
 export default observer(function TasksContainer () {
   const [text, setText] = useState('');
   const [filter, setFilter] = useState('');
   const cleanFilter = filter.trim();
-  const [tasks, $tasks] = useQuery('tasks', cleanFilter.length ? { text: { $regex: cleanFilter } } : {});
+  const [tasks, $tasks] = useTaskIds(cleanFilter.length ? { text: { $regex: cleanFilter } } : {});
 
   const handleAdd = () => {
     const readyText = text.trim()
