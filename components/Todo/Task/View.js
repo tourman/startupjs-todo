@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
   }
 })
 
-function TodoModal ({ text, visible, onChange, onSubmit, onClose }) {
+function TaskModal ({ text, visible, onChange, onSubmit, onClose }) {
   return visible ? (
     <Modal
       visible={visible}
@@ -63,33 +63,7 @@ function TodoModal ({ text, visible, onChange, onSubmit, onClose }) {
   ) : null
 }
 
-const TodoItemContainer = observer(function TodoItemContainer ({ id }) {
-  const [task, $task] = useDoc('tasks', id);
-  const handleDelete = () => $task.del();
-  const handleDone = () => {
-    const done = $task.get('done');
-    $task.set('done', !done);
-  }
-  const handleImportant = () => {
-    const important = $task.get('important');
-    $task.set('important', !important);
-  }
-  const handleEdit = text => $task.set('text', text);
-  const { text, done, important } = task;
-  return (
-    <TodoItem
-      text={text}
-      done={done}
-      important={important}
-      onDelete={handleDelete}
-      onDone={handleDone}
-      onImportant={handleImportant}
-      onEdit={handleEdit}
-    />
-  );
-});
-
-function TodoItem ({ text, done, important, onEdit, onDone, onImportant, onDelete }) {
+export default function TaskView ({ text, done, important, onEdit, onDone, onImportant, onDelete }) {
   const [modal, setModal] = useState(false)
   const [edit, setEdit] = useState(text)
   useEffect(() => {
@@ -97,7 +71,7 @@ function TodoItem ({ text, done, important, onEdit, onDone, onImportant, onDelet
   }, [text])
   return (
     <>
-      <TodoModal
+      <TaskModal
         text={edit}
         visible={modal}
         onChange={setEdit}
@@ -123,43 +97,4 @@ function TodoItem ({ text, done, important, onEdit, onDone, onImportant, onDelet
       </View>
     </>
   )
-}
-
-export default function TodoView ({ text, tasks, onAdd, onChangeText }) {
-  return (
-    <>
-      <View
-        style={[styles.container, { paddingBottom: viewPadding }]}
-      >
-        <FlatList
-          style={styles.list}
-          data={tasks}
-          renderItem={({ item: { id } }) => (
-            <TodoItemContainer
-              id={id}
-            />
-          )}
-        />
-        <TextInput
-          style={styles.textInput}
-          onChangeText={onChangeText}
-          onSubmitEditing={onAdd}
-          value={text}
-          placeholder='Add Tasks'
-          returnKeyType='done'
-          returnKeyLabel='done'
-        />
-      </View>
-      <Text>---</Text>
-    </>
-  )
-};
-
-TodoView.propTypes = {
-  text: PropTypes.string.isRequired,
-  tasks: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.string.isRequired,
-  })).isRequired,
-  onAdd: PropTypes.func.isRequired,
-  onChangeText: PropTypes.func.isRequired
 }

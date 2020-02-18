@@ -4,9 +4,10 @@ import cloneDeep from 'lodash/cloneDeep'
 
 import View from './View'
 
-export default observer(function TodoContainer () {
+export default observer(function TasksContainer () {
   const [tasks, $tasks] = useQuery('tasks', {});
   const [text, setText] = useState('');
+  const [filter, setFilter] = useState('');
 
   const handleAdd = () => {
     const readyText = text.trim()
@@ -24,8 +25,11 @@ export default observer(function TodoContainer () {
   return (
     <View
       onAdd={handleAdd}
+      onSearch={() => {}}
       onChangeText={setText}
+      onChangeFilter={setFilter}
       text={text}
+      text={filter}
       tasks={tasks}
     />
   )
