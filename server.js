@@ -10,9 +10,17 @@ startupjsServer({ getHead }, ee => {
   ee.on('routes', expressApp => {
     expressApp.get('/api', async (req, res) => {
       let { model } = req
+
       let $counter = model.at('counters.first')
       await $counter.subscribeAsync()
-      res.json({ name: 'Test API', counter: $counter.get() })
+
+      let $todo = model.at('todo.tasks')
+      await $todo.subscribeAsync()
+
+      const tasks = model.query('tasks', {})
+      await model.subscribeAsync(tasks)
+
+      res.json({ name: 'Test API', counter: $counter.get(), tasks: tasks.get() })
     })
   })
 })
