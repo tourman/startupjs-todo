@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { observer, useDoc, useQuery } from 'startupjs'
+import { observer, useDoc, useQuery, useLocal } from 'startupjs'
 import cloneDeep from 'lodash/cloneDeep'
 
 import View from './View'
@@ -10,7 +10,8 @@ const useTaskIds = query => {
 }
 
 export default observer(function TasksContainer () {
-  const [text, setText] = useState('');
+  const [text, $text] = useLocal('_session.text');
+  const setText = text => $text.set(text);
   const [filter, setFilter] = useState('');
   const cleanFilter = filter.trim();
   const [tasks, $tasks] = useTaskIds(cleanFilter.length ? { text: { $regex: cleanFilter } } : {});
