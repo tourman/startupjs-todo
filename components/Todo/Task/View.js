@@ -1,6 +1,6 @@
 import React, { Fragment, useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
-import { Modal, Button, View, FlatList, StyleSheet, Text, TextInput, Platform } from 'react-native'
+import { Modal, Button, View, FlatList, Text, TextInput, Platform } from 'react-native'
 import { observer, useDoc, useQuery } from 'startupjs'
 
 import './View.styl';
@@ -46,21 +46,17 @@ export default function TaskView ({ text, done, important, onEdit, onDone, onImp
         onClose=handleClose
       )
       View
-        View.list
-          if important
-            Text !
-          else
-            = null
-          Text.item
+        View.item
+          Text.text
             = text
-          if done
-            Text Done
-          else
-            = null
-          Button(title='V' onPress=onDone)
-          Button(title='!' onPress=onImportant)
-          Button(title='E' onPress=handleEdit)
-          Button(title='X' onPress=onDelete)
+          View.btn
+            Button(title='Done' onPress=onDone color=(done ? 'gray' : null))
+          View.btn
+            Button(title='Imp' onPress=onImportant color=(important ? 'red' : null))
+          View.btn
+            Button(title='Edit' onPress=handleEdit)
+          View.btn
+            Button(title='Remove' onPress=onDelete)
         View.hr
   `
 }
