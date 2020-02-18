@@ -23,7 +23,6 @@
   },
   "dependencies": {
     "axios": "^0.19.2",
-    "lodash": "^4.17.15",
     "nconf": "^0.10.0",
     "patch-package": "^6.2.0",
     "postinstall-postinstall": "^2.0.0",
