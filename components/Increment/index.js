@@ -11,7 +11,7 @@ export default observer(function Increment ({ stateCounter, setStateCounter }) {
     setStateCounter(stateCounter + 1)
   }
 
- return pug`
+  return pug`
     TouchableOpacity.button(
       styleName=[
         'increment',

@@ -1,32 +1,31 @@
 import React, { useState } from 'react'
-import { observer, useDoc, useQuery, useLocal } from 'startupjs'
-import cloneDeep from 'lodash/cloneDeep'
+import { observer, useQuery, useLocal } from 'startupjs'
 
 import View from './View'
 
 const useTaskIds = query => {
-  const [tasks, $tasks] = useQuery('tasks', query);
-  return [tasks.map(({ id }) => ({ id })), $tasks];
+  const [tasks, $tasks] = useQuery('tasks', query)
+  return [tasks.map(({ id }) => ({ id })), $tasks]
 }
 
 export default observer(function TasksContainer () {
-  const [text, $text] = useLocal('_session.text');
-  const setText = text => $text.set(text);
-  const [filter, setFilter] = useState('');
-  const cleanFilter = filter.trim();
-  const [tasks, $tasks] = useTaskIds(cleanFilter.length ? { text: { $regex: cleanFilter } } : {});
+  const [text, $text] = useLocal('_session.text')
+  const setText = text => $text.set(text)
+  const [filter, setFilter] = useState('')
+  const cleanFilter = filter.trim()
+  const [tasks, $tasks] = useTaskIds(cleanFilter.length ? { text: { $regex: cleanFilter } } : {})
 
   const handleAdd = () => {
     const readyText = text.trim()
     if (!readyText) {
       return
     }
-    setText('');
+    setText('')
     $tasks.add({
       text: readyText,
       done: false,
-      important: false,
-    });
+      important: false
+    })
   }
 
   return pug`
@@ -39,5 +38,5 @@ export default observer(function TasksContainer () {
       filter=filter
       tasks=tasks
     )
-  `;
+  `
 })

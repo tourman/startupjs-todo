@@ -17,8 +17,8 @@ startupjsServer({ getHead }, ee => {
       let $todo = model.at('todo.tasks')
       await $todo.subscribeAsync()
 
-      const tasks = model.query('tasks', {});
-      await model.subscribeAsync(tasks);
+      const tasks = model.query('tasks', {})
+      await model.subscribeAsync(tasks)
 
       res.json({ name: 'Test API', counter: $counter.get(), tasks: tasks.get() })
     })

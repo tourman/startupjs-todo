@@ -1,28 +1,25 @@
 import React, { Fragment, useState, useEffect } from 'react'
-import PropTypes from 'prop-types'
-import { Modal, Button, View, FlatList, Text, TextInput, Platform } from 'react-native'
-import { observer, useDoc, useQuery } from 'startupjs'
+import { Modal, Button, View, Text, TextInput } from 'react-native'
 
-import './View.styl';
+import './View.styl'
 
 function TaskModal ({ text, visible, onChange, onSubmit, onClose }) {
-   return visible ? pug`
-     Modal(
-       visible=visible
-       transparent=false
-       onRequestClose=onClose
-     )
-       View
-         TextInput(
-           onChangeText=onChange
-           onSubmitEditing=onSubmit
-           value=text
-           returnKeyType='done'
-           returnKeyLabel='done'
-         )
-   ` : null;
+  return visible ? pug`
+    Modal(
+      visible=visible
+      transparent=false
+      onRequestClose=onClose
+    )
+    View
+      TextInput(
+       onChangeText=onChange
+       onSubmitEditing=onSubmit
+       value=text
+       returnKeyType='done'
+       returnKeyLabel='done'
+      )
+   ` : null
 }
-
 
 export default function TaskView ({ text, done, important, onEdit, onDone, onImportant, onDelete }) {
   const [modal, setModal] = useState(false)
@@ -34,8 +31,8 @@ export default function TaskView ({ text, done, important, onEdit, onDone, onImp
     onEdit(edit)
     setModal(false)
   }
-  const handleClose = () => setModal(false);
-  const handleEdit = () => setModal(prevModal => !prevModal);
+  const handleClose = () => setModal(false)
+  const handleEdit = () => setModal(prevModal => !prevModal)
   return pug`
     Fragment
       TaskModal(
