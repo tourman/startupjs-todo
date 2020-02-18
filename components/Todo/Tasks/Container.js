@@ -5,9 +5,10 @@ import cloneDeep from 'lodash/cloneDeep'
 import View from './View'
 
 export default observer(function TasksContainer () {
-  const [tasks, $tasks] = useQuery('tasks', {});
   const [text, setText] = useState('');
   const [filter, setFilter] = useState('');
+  const cleanFilter = filter.trim();
+  const [tasks, $tasks] = useQuery('tasks', cleanFilter.length ? { text: { $regex: cleanFilter } } : {});
 
   const handleAdd = () => {
     const readyText = text.trim()
@@ -29,7 +30,7 @@ export default observer(function TasksContainer () {
       onChangeText={setText}
       onChangeFilter={setFilter}
       text={text}
-      text={filter}
+      filter={filter}
       tasks={tasks}
     />
   )
