@@ -3,6 +3,8 @@ import PropTypes from 'prop-types'
 import { Modal, Button, View, FlatList, StyleSheet, Text, TextInput, Platform } from 'react-native'
 import { observer, useDoc, useQuery } from 'startupjs'
 
+import './View.styl';
+
 const isAndroid = Platform.OS === 'android'
 const viewPadding = 10
 
@@ -51,7 +53,6 @@ function TaskModal ({ text, visible, onChange, onSubmit, onClose }) {
      )
        View
          TextInput(
-           style=styles.textInput
            onChangeText=onChange
            onSubmitEditing=onSubmit
            value=text
@@ -60,6 +61,7 @@ function TaskModal ({ text, visible, onChange, onSubmit, onClose }) {
          )
    ` : null;
 }
+
 
 export default function TaskView ({ text, done, important, onEdit, onDone, onImportant, onDelete }) {
   const [modal, setModal] = useState(false)
@@ -98,6 +100,6 @@ export default function TaskView ({ text, done, important, onEdit, onDone, onImp
           Button(title='!' onPress=onImportant)
           Button(title='E' onPress=handleEdit)
           Button(title='X' onPress=onDelete)
-        View(style=styles.hr)
+        View(styleName='hr')
   `
 }
