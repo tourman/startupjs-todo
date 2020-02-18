@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { Modal, Button, View, FlatList, StyleSheet, Text, TextInput, Platform } from 'react-native'
+import { observer, useDoc, useQuery } from 'startupjs'
 
 const isAndroid = Platform.OS === 'android'
 const viewPadding = 10
@@ -62,7 +63,33 @@ function TodoModal ({ text, visible, onChange, onSubmit, onClose }) {
   ) : null
 }
 
-function TodoItem ({ text, done, important, onEditTask, onDoneTask, onImportantTask, onDeleteTask }) {
+const TodoItemContainer = observer(function TodoItemContainer ({ id }) {
+  const [task, $task] = useDoc('tasks', id);
+  const handleDelete = () => $task.del();
+  const handleDone = () => {
+    const done = $task.get('done');
+    $task.set('done', !done);
+  }
+  const handleImportant = () => {
+    const important = $task.get('important');
+    $task.set('important', !important);
+  }
+  const handleEdit = text => $task.set('text', text);
+  const { text, done, important } = task;
+  return (
+    <TodoItem
+      text={text}
+      done={done}
+      important={important}
+      onDelete={handleDelete}
+      onDone={handleDone}
+      onImportant={handleImportant}
+      onEdit={handleEdit}
+    />
+  );
+});
+
+function TodoItem ({ text, done, important, onEdit, onDone, onImportant, onDelete }) {
   const [modal, setModal] = useState(false)
   const [edit, setEdit] = useState(text)
   useEffect(() => {
@@ -75,7 +102,7 @@ function TodoItem ({ text, done, important, onEditTask, onDoneTask, onImportantT
         visible={modal}
         onChange={setEdit}
         onSubmit={() => {
-          onEditTask(edit)
+          onEdit(edit)
           setModal(false)
         }}
         onClose={() => setModal(false)}
@@ -87,10 +114,10 @@ function TodoItem ({ text, done, important, onEditTask, onDoneTask, onImportantT
             {text}
           </Text>
           {done ? <Text>(Done)</Text> : null}
-          <Button title='V' onPress={onDoneTask} />
-          <Button title='!' onPress={onImportantTask} />
+          <Button title='V' onPress={onDone} />
+          <Button title='!' onPress={onImportant} />
           <Button title='E' onPress={() => setModal(prevModal => !prevModal)} />
-          <Button title='X' onPress={onDeleteTask} />
+          <Button title='X' onPress={onDelete} />
         </View>
         <View style={styles.hr} />
       </View>
@@ -98,7 +125,7 @@ function TodoItem ({ text, done, important, onEditTask, onDoneTask, onImportantT
   )
 }
 
-export default function TodoView ({ text, tasks, onAddTask, onEditTask, onDoneTask, onImportantTask, onDeleteTask, onChangeText }) {
+export default function TodoView ({ text, tasks, onAdd, onChangeText }) {
   return (
     <>
       <View
@@ -107,20 +134,16 @@ export default function TodoView ({ text, tasks, onAddTask, onEditTask, onDoneTa
         <FlatList
           style={styles.list}
           data={tasks}
-          renderItem={({ item, index }) => (
-            <TodoItem
-              {...item}
-              onEditTask={onEditTask(index)}
-              onDoneTask={onDoneTask(index)}
-              onImportantTask={onImportantTask(index)}
-              onDeleteTask={onDeleteTask(index)}
+          renderItem={({ item: { id } }) => (
+            <TodoItemContainer
+              id={id}
             />
           )}
         />
         <TextInput
           style={styles.textInput}
           onChangeText={onChangeText}
-          onSubmitEditing={onAddTask}
+          onSubmitEditing={onAdd}
           value={text}
           placeholder='Add Tasks'
           returnKeyType='done'
@@ -135,14 +158,8 @@ export default function TodoView ({ text, tasks, onAddTask, onEditTask, onDoneTa
 TodoView.propTypes = {
   text: PropTypes.string.isRequired,
   tasks: PropTypes.arrayOf(PropTypes.shape({
-    text: PropTypes.string.isRequired,
-    important: PropTypes.bool.isRequired,
-    done: PropTypes.bool.isRequired
+    id: PropTypes.string.isRequired,
   })).isRequired,
-  onAddTask: PropTypes.func.isRequired,
-  onEditTask: PropTypes.func.isRequired,
-  onDoneTask: PropTypes.func.isRequired,
-  onImportantTask: PropTypes.func.isRequired,
-  onDeleteTask: PropTypes.func.isRequired,
+  onAdd: PropTypes.func.isRequired,
   onChangeText: PropTypes.func.isRequired
 }
